@@ -33,3 +33,9 @@ npm run build
 ```sh
 npm run lint
 ```
+## selectdate
+const selectedDate = ref(new Date().toISOString().split('T')[0]) 
+
+//toISOtring koncerterar datum till sträng i formatet "YYYY-MM-DDTHH:mm:ss.sssZ"
+
+// "date" innehåller datum och tid, så split T gör så att tiden separeras. och [0] gör att datumet är array0 och tid array1
