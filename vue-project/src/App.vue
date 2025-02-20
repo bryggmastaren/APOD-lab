@@ -1,9 +1,10 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import { RouterView } from 'vue-router'
-  import Form from './components/Form.vue'
 
-  // import { Forms } from './components/Form.vue'
+  import Form from './components/Form.vue'
+  import FetchAPOD from './components/FetchAPOD.vue'
+  import Nav from './components/Nav.vue'
 
   // gör om till comp api lol :/
 
@@ -15,45 +16,47 @@
   const isVideo = ref(false) // För att kontrollera om det är en video
   const defaultImageUrl = ref('media/favicon(1).ico') // Fallbackbild om ingen bild hämtas
 
-  // funktion HÄMTA DATA från API
-  //((ersätter "methods" från options api))
-  const fetchAPOD = async () => {
-    const apiKey = 'bLKsuQaFpHG3mK8eo9UwyCI1RXpF9CKf8DqVYmiW'
-    const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${selectedDate.value}`
-
-    try {
-      const response = await fetch(url)
-      const data = await response.json()
-
-      title.value = data.title || 'No Title'
-      imageUrl.value = data.url || defaultImageUrl.value //  Hämta hdurl annars fallback bilden
-      explanation.value = data.explanation || 'No explanation'
-      copyright.value = data.copyright || 'No Title'
-      isVideo.value = data.media_type === 'video'
-    } catch (error) {
-      console.error('Fetch error:', error)
-      alert('Failed to fetch data. Please try again later.') // Felmeddelande till användarn
-    }
+  const getVideoId = (url) => {
+    const match = url.match(
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    )
+    return match ? match[1] : null
+  }
+  // funktion för att uppdatera data när FetchAPOD skickar tillbaka data
+  const updateData = (data) => {
+    title.value = data.title
+    imageUrl.value = data.imageUrl
+    explanation.value = data.explanation
+    copyright.value = data.copyright
+    isVideo.value = data.isVideo
   }
 
-  const updateBtn = () => {
-    //när updateBtn klickas, kör fetchAPOD
-    fetchAPOD()
+  // funktion uppdaterar selectedDate när formuläret ändras
+  const updateDate = (date) => {
+    selectedDate.value = date
   }
-
-  onMounted(() => {
-    fetchAPOD()
-  })
 </script>
 
 <template>
-  <Form @update-date="update - date" />
+  <!--<v-app> -->
+  <!-- <Nav /> -->
+  <!-- Formulärkomponenten-->
+  <Form @update-date="updateDate" />
+  <FetchAPOD :selectedDate="selectedDate" @update-data="updateData" />
   <h1>{{ title }}</h1>
   <!-- <p> {{ selectedDate }}</p> VISA DATUM -->
 
   <!-- Bilden/videon visas här. v-bind används genom ":" innan "src" -->
   <div v-if="isVideo">
-    <video :src="imageUrl" controls alt="astro video"></video>
+    <iframe
+      width="480"
+      height="270"
+      style="border-radius: 8px; margin: 20px"
+      :src="`https://www.youtube.com/embed/${getVideoId(imageUrl)}`"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
   </div>
   <div v-else>
     <img :src="imageUrl || defaultImageUrl" alt="astro bild" class="apod-image" />
@@ -62,6 +65,7 @@
   <!--beskrivning o copyright -->
   <p id="explan">{{ explanation }}</p>
   <p id="copyright">Copyright: {{ copyright }}</p>
+  <!-- </v-app>-->
 </template>
 
 <style scoped>
