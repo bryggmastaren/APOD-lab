@@ -3,10 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,14 +15,19 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: transparent;
 }
 h1 {
   font-size: 3em;
   line-height: 1.1;
   transition: ease all 0.3s;
+  padding-bottom: 1.2rem;
 }
 #explan {
   padding: 0 1.2rem;
+}
+#copyright {
+  padding-top: 3rem;
 }
 
 #app {
@@ -38,6 +39,14 @@ h1 {
 .vue-devtools__panel {
   display: none !important;
 }
+main {
+  background-color: transparent;
+}
+p {
+  font-size: 1.3rem;
+  line-height: 150%;
+}
+/* onödig? finns i nav? */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -51,5 +60,9 @@ h1 {
   h1 {
     font-size: 2.5rem;
     transition: all 0.2s ease;
+  }
+  p {
+    font-size: 0.9rem;
+    line-height: 150%;
   }
 }

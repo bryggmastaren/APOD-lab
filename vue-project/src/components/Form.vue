@@ -1,6 +1,5 @@
 <script setup>
-  import { RouterView } from 'vue-router'
-  import { ref, defineEmits } from 'vue'
+  import { ref } from 'vue'
 
   const emit = defineEmits(['update-date'])
   const selectedDate = ref(new Date().toISOString().split('T')[0])
@@ -22,7 +21,13 @@
         placeholder="Pick a date"
         aria-label="Enter a date"
       />
-      <v-btn height="26px" elevation="0" class="custom-btn" type="button" @click="updateBtn()"
+      <v-btn
+        :ripple="{ center: true, class: 'custom-ripple' }"
+        height="26px"
+        elevation="0"
+        class="custom-btn"
+        type="button"
+        @click="updateBtn"
         >Update</v-btn
       >
       <!-- v-on med @click-->
@@ -40,7 +45,7 @@
   * {
     box-sizing: border-box;
     width: 100%;
-    transition: ease all 0.2s;
+    transition: ease-out 0.3s;
   }
   div {
     display: flex;
@@ -68,13 +73,12 @@
     /* !! height ändras i template v-btn */
   }
   /* INOUT HOVER */
-  input::before {
-    background-color: transparent;
-    transition: ease all 0.4s;
+  input[type='date'] {
+    border: 1px solid #fff;
   }
-  input:hover {
-    background-color: #444444;
-    transition: ease all 0.4s;
+  input[type='date']:hover {
+    border: 1.25px solid #d0adf0;
+    transform: scale(1.01);
   }
   /* DATE PICKER ICON */
   input[type='date']::-webkit-calendar-picker-indicator {
@@ -82,20 +86,26 @@
     border-radius: 2px;
   }
   input[type='date']::-webkit-calendar-picker-indicator:hover {
-    background-color: rgb(108, 108, 108);
+    background-color: #d0adf0c0;
   }
   /* BUTTON HOVER */
-  .custom-btn::before {
+  .custom-btn {
+    /* kunde ej använda >>> utan behöver använda ::v-deep pga vue */
     background-color: transparent;
-    transition: ease all 0.4s;
+    border: 1px solid #fff;
+    height: 28px;
+    transform: scale(1.05);
   }
 
   .custom-btn:hover {
     color: #fff;
-    background-color: #515151;
-    transition: ease all 0.4s;
+    border: 1.3px solid #d0adf0;
+    transform: scale(1.06);
   }
-
+  /* animation så button matchar input */
+  button {
+    transition: ease-in-out 0.3s !important;
+  }
   /* MOBIL */
   @media only screen and (max-width: 400px) {
     form {

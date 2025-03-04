@@ -1,11 +1,11 @@
-import './assets/main.css'
-import './assets/style.css' // här är all css hittills
+import './assets/style.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import vuetify from './plugins/vuetify'
-
 import App from './App.vue'
+
+import { createPinia } from 'pinia'
+import vuetify from './plugins/vuetify.js' /* ha med .js? */
+
 import router from './router'
 
 const app = createApp(App)
